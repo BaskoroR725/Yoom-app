@@ -20,7 +20,7 @@ const Navbar = () => {
         </p>
       </Link>
 
-      <div className="flex-between gap-5" >
+      <div className="flex flex-between gap-5" >
         {/* Clerk - user management */}
         <SignedIn>
           <UserButton />

@@ -45,11 +45,10 @@ const MobileNav = () => {
             {/* sepertinya sheer component mewajibkan header,title,description */}
             <SheetHeader className="sr-only">
               <SheetTitle className="sr-only">
-                Are you absolutely sure?
+                
               </SheetTitle>
               <SheetDescription className="sr-only">
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                
               </SheetDescription>
             </SheetHeader>
             {/* batas component di ignore atau tidak dipakai untuk menghilangkan eror di console*/}
