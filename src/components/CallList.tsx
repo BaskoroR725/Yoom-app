@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { useGetCalls } from "../../hooks/useGetCalls";
@@ -7,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Call, CallRecording } from "@stream-io/video-react-sdk";
 import MeetingCard from "./MeetingCard";
 import Loader from "./Loader";
+import { toast } from "sonner";
 
 const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } =
@@ -53,11 +52,12 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
 
         setRecordings(recordings);
       } catch (error) {
-        toast("Try again later",error);
+        toast("Try again later");
+        console.log(error);
       }
     };
 
-    if (type === recordings) fetchRecordings();
+    if (type === "recordings") fetchRecordings();
   }, [type, callRecordings]);
 
   const calls = getCalls();
@@ -80,30 +80,32 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
             }
             title={
               (meeting as Call).state?.custom.description.substring(0, 26) ||
-              meeting.filename.substring(0, 20) ||
+              (meeting as CallRecording).filename?.substring(0, 20) ||
               "No Description"
             }
             date={
-              meeting.state?.startsAt.localString() ||
-              meeting.start_time.toLocalString()
+              (meeting as Call).state?.startsAt?.toLocaleString() ||
+              (meeting as CallRecording).start_time?.toLocaleString()
             }
             isPreviousMeeting={type === "ended"}
             buttonIcon1={type === "recordings" ? "/icons/play.svg" : undefined}
             buttonText={type === "recordings" ? "Play" : "Start"}
             link={
               type === "recordings"
-                ? meeting.url
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`
+                ? (meeting as CallRecording).url
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${
+                    (meeting as Call).id
+                  }`
             }
             handleClick={
               type === "recordings"
-                ? () => router.push(`${meeting.url}`)
-                : () => router.push(`/meeting/${meeting.id}`)
+                ? () => router.push(`${(meeting as CallRecording).url}`)
+                : () => router.push(`/meeting/${(meeting as Call).id}`)
             }
           />
         ))
       ) : (
-        <h1>{noCallsMessage}</h1>
+        <h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
       )}
     </div>
   );

@@ -3,13 +3,14 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useEffect, useState } from "react";
 
 export const useGetCalls = () => {
+  const { user } = useUser();
+  const client = useStreamVideoClient();
   const [calls, setCalls] = useState<Call[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const client = useStreamVideoClient();
-  const { user } = useUser();
 
   useEffect(() => {
     const loadCalls = async () => {
+      console.log({ user, client });
       if (!client || !user?.id) return;
 
       setIsLoading(true);
@@ -34,14 +35,14 @@ export const useGetCalls = () => {
     };
 
     loadCalls();
-  }, [client, user?.id]);
+  }, [client, user]);
 
   const now = new Date();
 
-  const endedCalls = calls.filter(({ state: { startsAt, endedAt } }: Call) => {
+  const endedCalls = calls?.filter(({ state: { startsAt, endedAt } }: Call) => {
     return (startsAt && new Date(startsAt) < now) || !!endedAt;
   });
-  const upcomingCalls = calls.filter(({ state: { startsAt } }: Call) => {
+  const upcomingCalls = calls?.filter(({ state: { startsAt } }: Call) => {
     return startsAt && new Date(startsAt) > now;
   });
 
