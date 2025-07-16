@@ -2,7 +2,9 @@ import React, { ReactNode } from "react";
 
 import {
   Dialog,
+  DialogTitle,
   DialogContent,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -35,7 +37,9 @@ const MeetingModals = ({
 }: MeetingModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogTitle className="sr-only" >User Modals</DialogTitle> {/* must include because radix ui need it */}
       <DialogContent className="flex w-full max-w-[520px] flex-col gap-6 border-none bg-dark-1 px-6 py-9 text-white">
+        <DialogDescription className="sr-only" >User Description</DialogDescription>{/* must include because radix ui need it */}
         <div className="flex flex-col gap-6 ">
           {image && (
             <div className="flex justify-center">

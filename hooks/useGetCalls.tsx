@@ -8,9 +8,9 @@ export const useGetCalls = () => {
   const [calls, setCalls] = useState<Call[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log({ user, client });
   useEffect(() => {
     const loadCalls = async () => {
-      console.log({ user, client });
       if (!client || !user?.id) return;
 
       setIsLoading(true);
